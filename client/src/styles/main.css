@@ -41,7 +41,7 @@ body {
 }
 
 .sidebar {
-  flex: 0 0 350px;
+  flex: 1 0 350px;
   min-width: 300px;
 }
 
