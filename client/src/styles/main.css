@@ -34,7 +34,13 @@ body {
   gap: 2rem;
   flex-wrap: wrap;
 }
-
+.game-page {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+}
 .main-content {
   flex: 1;
   min-width: 300px;

@@ -1,10 +1,10 @@
-// client/src/components/Leaderboard.jsx
-import { useState, useEffect } from 'react';
+// src/components/Leaderboard.jsx
+import { useState, useEffect } from "react";
 
 export default function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchLeaderboard();
@@ -12,16 +12,17 @@ export default function Leaderboard() {
 
   const fetchLeaderboard = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/leaderboard?limit=10');
+      const response = await fetch(
+        "http://localhost:3000/api/leaderboard?limit=10",
+      );
       const data = await response.json();
-
       if (data.success) {
         setLeaderboard(data.leaderboard);
       } else {
-        setError('Failed to load leaderboard');
+        setError("Failed to load leaderboard");
       }
-    } catch (err) {
-      setError('Could not connect to server');
+    } catch (error) {
+      setError("Could not connect to server");
     } finally {
       setLoading(false);
     }

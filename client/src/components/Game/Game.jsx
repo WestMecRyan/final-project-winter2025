@@ -11,11 +11,10 @@ import {
   createInitialGameState,
 } from "../../utils/gameLogic";
 
-export default function Game() {
+export default function Game({ onGameEnd }) {
   const [gameState, setGameState] = useState(createInitialGameState());
   const [player, setPlayer] = useState(null);
-  const hasUpdatedStatsRef = useRef(false);
-
+  const hasUpdatedStatsRef = useRef(null);
   const { board, currentPlayer, gameOver, winner, winningCombo } = gameState;
 
   const handleCellClick = (position) => {
@@ -48,9 +47,7 @@ export default function Game() {
     hasUpdatedStatsRef.current = false;
   };
 
-  // Update player stats when game ends
   useEffect(() => {
-    // Only run if game is over, player exists, and we haven't already updated
     if (!gameOver || !player || hasUpdatedStatsRef.current) {
       return;
     }
@@ -60,35 +57,41 @@ export default function Game() {
 
       try {
         let result;
-        if (winner === 'DRAW') {
-          result = 'tie';
-        } else if (winner === 'X') {
-          result = 'win';
+        if (winner === "DRAW") {
+          result = "tie";
+        } else if (winner === "X") {
+          result = "win";
         } else {
-          result = 'loss';
+          result = "loss";
         }
 
-        const response = await fetch(`http://localhost:3000/api/players/${player.id}/stats`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ result })
-        });
+        const response = await fetch(
+          `http://localhost:3000/api/players/${player.id}/stats`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ result }),
+          },
+        );
 
         if (response.ok) {
           const data = await response.json();
           setPlayer(data.player);
-          console.log('Stats updated:', data.player);
+          console.log("Stats udpated:", data.player);
+
+          if (onGameEnd) {
+            onGameEnd();
+          }
         }
       } catch (error) {
-        console.error('Failed to update stats:', error);
-        hasUpdatedStatsRef.current = false; // Allow retry on error
+        console.error("Failed to update stats:", error);
+        hasUpdatedStatsRef.current = false;
       }
     };
 
     updateStats();
-  }, [gameOver, winner, player]);
+  }, [gameOver, winner, player, onGameEnd]);
 
-  // Show player setup if no player is logged in
   if (!player) {
     return <PlayerSetup onPlayerSet={setPlayer} />;
   }

@@ -1,40 +1,37 @@
-// client/src/components/PlayerSetup.jsx
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function PlayerSetup({ onPlayerSet }) {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!name.trim()) {
-      setError('Please enter your name');
+      setError("Please enter your name");
       return;
     }
 
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const response = await fetch('http://localhost:3000/api/players', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name.trim() })
+      const response = await fetch("http://localhost:3000/api/players", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name.trim() }),
       });
-
       const data = await response.json();
-
       if (data.success) {
-        localStorage.setItem('playerId', data.player.id);
-        localStorage.setItem('playerName', data.player.name);
+        localStorage.setItem("playerId", data.player.id);
+        localStorage.setItem("playerName", data.player.name);
         onPlayerSet(data.player);
       } else {
-        setError(data.error || 'Failed to create player');
+        setError(data.error || "Failed to Create Player");
       }
-    } catch (err) {
-      setError('Could not connect to server');
+    } catch (error) {
+      setError("Could not connect to server");
     } finally {
       setLoading(false);
     }
@@ -57,7 +54,7 @@ export default function PlayerSetup({ onPlayerSet }) {
           className="player-input"
         />
         <button type="submit" disabled={loading} className="btn btn-primary">
-          {loading ? 'Saving...' : 'Start Game'}
+          {loading ? "Saving..." : "Start Game"}
         </button>
       </form>
     </div>

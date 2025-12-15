@@ -1,18 +1,12 @@
 // src/App.jsx
-import Game from './components/Game/Game'
-import Leaderboard from './components/Leaderboard'
+import GamePage from "./components/GamePage";
 
 function App() {
   return (
     <div className="app">
-      <div className="main-content">
-        <Game />
-      </div>
-      <aside className="sidebar">
-        <Leaderboard />
-      </aside>
+      <GamePage />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
